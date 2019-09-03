@@ -20,13 +20,12 @@ server.post('/api/posts', (req, res) => {
 });
 
 server.post('/api/posts/:id/comments', (req, res) => {
-    const newComment = req.body;
-
-    if (newComment.text) {
+    
+    if (req.body.text) {
         Posts.findById(req.params.id)
             .then(post => {
                 if (post.length) {
-                    Posts.insertComment({ ...newComment, post_id: req.params.id })
+                    Posts.insertComment({ ...req.body, post_id: req.params.id })
                         .then(comment => {
                             res.status(201).json(comment);
                         })
@@ -37,8 +36,8 @@ server.post('/api/posts/:id/comments', (req, res) => {
                     res.status(404).json({ message: 'The post with the specified ID does not exist.' });
                 }
             })
-            .catch(error => {
-                res.status(500).json({ error: error, message: 'The posts information could not be retrieved.' });
+            .catch(() => {
+                res.status(500).json({ message: 'The posts information could not be retrieved.' });
             });
     } else {
         res.status(400).json({ errorMessage: 'Please provide text for the comment.' });
