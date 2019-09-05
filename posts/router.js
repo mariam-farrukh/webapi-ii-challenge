@@ -54,11 +54,11 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    const {postsid} = req.params;
-
-    Posts.findById(postsid)
+    const {id} = req.params;
+    Posts.findById(id)
         .then(post => {
-            if (postsid) {
+            console.log(post);
+            if (post && post.length > 0) {
                 res.status(200).json(post); 
             } else {
                 res.status(404).json({message: 'The post with the specified ID does not exist.' });
